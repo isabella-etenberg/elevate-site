@@ -14,7 +14,8 @@
 <h1 id="title">Confirming your email…</h1>
 <div class="card">
   <p id="body">One moment while we confirm it's really you.</p>
-  <p class="small" style="margin-bottom:0" id="hint"></p>
+  <p id="open" class="hidden" style="margin:16px 0 0"><a class="btn" href="com.isabellaetenberg.elevate://email-confirmed">Open Elevate</a></p>
+  <p class="small" style="margin:14px 0 0" id="hint"></p>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.0/dist/umd/supabase.js" integrity="sha384-dGnL7r9uccC9TdSdE05clTJ6esxMU42XBQ1/BWLzKQOBi7qR1aCMRIi0LzUmexIg" crossorigin="anonymous"></script>
 <script>
@@ -25,10 +26,18 @@ const q = new URLSearchParams(location.search);
 const tokenHash = q.get("token_hash");
 const type = q.get("type");
 const t = document.getElementById("title"), b = document.getElementById("body"), h = document.getElementById("hint");
+const isPhone = /iPhone|iPad|iPod/.test(navigator.userAgent);
 function ok() {
   t.textContent = "You're all set.";
-  b.textContent = "Your email is confirmed. Open the Elevate app on your phone and sign in.";
-  h.textContent = "You can close this page.";
+  if (isPhone) {
+    b.textContent = "Your email is confirmed. Opening Elevate so you can sign in…";
+    h.textContent = "If Elevate doesn't open, tap the button above.";
+    document.getElementById("open").classList.remove("hidden");
+    setTimeout(function () { location.href = "com.isabellaetenberg.elevate://email-confirmed"; }, 700);
+  } else {
+    b.textContent = "Your email is confirmed. Open the Elevate app on your phone and sign in.";
+    h.textContent = "You can close this page.";
+  }
 }
 function fail() {
   t.textContent = "This link didn't work.";
