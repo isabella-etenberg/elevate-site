@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<title>Email confirmed | Elevate</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><a class="brand" href="./">Elevate</a></header>
+<main>
+<h1 id="title">Confirming your email…</h1>
+<div class="card">
+  <p id="body">One moment while we confirm it's really you.</p>
+  <p class="small" style="margin-bottom:0" id="hint"></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.0/dist/umd/supabase.js" integrity="sha384-dGnL7r9uccC9TdSdE05clTJ6esxMU42XBQ1/BWLzKQOBi7qR1aCMRIi0LzUmexIg" crossorigin="anonymous"></script>
+<script>
+const sb = supabase.createClient("https://ygvelwkhjdwpuwekhfwe.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndmVsd2toamR3cHV3ZWtoZndlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA5Mjk1OTksImV4cCI6MjEwNjUwNTU5OX0.u8MqH28e9z3zuzR3wKnQReAFaDq8sKSKumywgQkWTH0", {
+  auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+});
+const q = new URLSearchParams(location.search);
+const tokenHash = q.get("token_hash");
+const type = q.get("type");
+const t = document.getElementById("title"), b = document.getElementById("body"), h = document.getElementById("hint");
+function ok() {
+  t.textContent = "You're all set.";
+  b.textContent = "Your email is confirmed. Open the Elevate app on your phone and sign in.";
+  h.textContent = "You can close this page.";
+}
+function fail() {
+  t.textContent = "This link didn't work.";
+  b.textContent = "It may have expired or already been used. Open the Elevate app and sign in. If your email still needs confirming, request a new link from the app.";
+  h.innerHTML = 'Still stuck? Email <a href="mailto:hello@isabellaetenberg.com">hello@isabellaetenberg.com</a>.';
+}
+if (!tokenHash || !type) {
+  fail();
+} else {
+  sb.auth.verifyOtp({ token_hash: tokenHash, type: type }).then(function (r) {
+    if (r.error) fail(); else ok();
+    history.replaceState(null, "", location.pathname);
+  }).catch(fail);
+}
+</script>
+</main>
+<footer>
+  <a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="support.html">Support</a>
+</footer>
+</body>
+</html>
