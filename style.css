@@ -21,12 +21,11 @@ a { color: var(--forest); }
 header, main, footer { max-width: 680px; margin: 0 auto; padding: 0 20px; }
 header { padding-top: 36px; }
 .brand {
-  font-family: Georgia, "Times New Roman", serif;
-  font-style: italic;
-  font-size: 30px;
-  color: var(--forest);
+  display: inline-block;
+  line-height: 0;
   text-decoration: none;
 }
+.brand img { display: block; height: auto; max-width: 190px; width: 100%; }
 main { padding-top: 28px; padding-bottom: 40px; }
 h1 { font-size: 30px; line-height: 1.25; margin: 0 0 12px; }
 h2 { font-size: 20px; margin: 34px 0 8px; }
